@@ -1,30 +1,41 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
-import { CATEGORIES } from "./../../data/dummy-data";
 import DefaultText from "./../../components/DefaultText";
-
 import MealList from './../components/MealList';
+import Categories from "../../services/Categories"
 
 const CategoryMealsScreen = props => {
   const { route } = props;
 
   const catId = route.params?.categoryId ?? "defaultValue";
   console.log("catId::" + catId);
-  // return (<Text>CategoryMeals</Text>)
-  const availableMeals = useSelector(state => state.meals.filteredMeals);
-  const displayedMeals = availableMeals.filter(
-    meal => meal.categoryIds.indexOf(catId) >= 0
-  );
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    Categories.findOne(catId)
+      .then((response) => {
+        setData(response);
+        setLoading(false)
+      })
+      .catch((error) => {
+        console.log(error.response);
+      })
+  }, [])
+  if (loading) return (
+    <View style={styles.content}>
+      <Text>Please Wait While Data is Laoding</Text>
+    </View>
+  )
 
-  if (displayedMeals.length === 0) {
+  if (data.meals.length === 0) {
     return (
       <View style={styles.content}>
         <DefaultText>No meals found, maybe check your filters?</DefaultText>
       </View>
     );
   }
-  return <MealList listData={displayedMeals} navData={props.navigation} />;
+  return <MealList listData={data.meals} navData={props.navigation} />;
 };
 
 CategoryMealsScreen.navigationOptions = navigationData => {

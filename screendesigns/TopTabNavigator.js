@@ -14,7 +14,6 @@ function HomeScreen() {
 function SettingsScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Trending</Text>
     </View>
   );
 }
@@ -26,7 +25,6 @@ export default function TopTabNavigator() {
     
     <Tab.Navigator>
         <Tab.Screen name="Categories" component={HomeScreen} />
-        <Tab.Screen name="Trending" component={SettingsScreen} />
     </Tab.Navigator>
      
    

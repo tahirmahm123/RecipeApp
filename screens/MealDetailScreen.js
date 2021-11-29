@@ -6,7 +6,7 @@ import {useSelector,useDispatch} from 'react-redux';
 import { MEALS } from '../data/dummy-data';
 import HeaderButton from '../components/HeaderButton';
 import DefaultText from '../components/DefaultText';
-import { toggleFavorite } from './../store/meals.actions';
+import { toggleFavorite } from '../store/meals.actions';
 
 const ListItem = props => {
   return (

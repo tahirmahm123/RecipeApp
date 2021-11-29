@@ -1,14 +1,27 @@
 //import liraries
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { View, Text, StyleSheet,Button,FlatList } from 'react-native';
-
-import { CATEGORIES } from './../../data/dummy-data';
-
 import CategoryGridTile from './../components/CategoryGridTile';
-
+import Categories from "../../services/Categories"
 // create a component
 const CategoriesScreen = props => {
-
+const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    Categories.fetchAll()
+      .then((response) => {
+        setData(response);
+        setLoading(false)
+      })
+      .catch((error) => {
+        console.log(error.response);
+      })
+  }, [])
+  if (loading) return (
+    <View style={styles.content}>
+      <Text>Please Wait While Data is Laoding</Text>
+    </View>
+  )
     const renderGridItem = itemData => {
         return (
           <CategoryGridTile
@@ -30,7 +43,7 @@ const CategoriesScreen = props => {
         return (
             <FlatList
             keyExtractor={(item, index) => item.id}
-            data={CATEGORIES}
+            data={data}
             renderItem={renderGridItem}
             numColumns={2}
           />
@@ -40,12 +53,16 @@ const CategoriesScreen = props => {
 
 // define your styles
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      
-    },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  content: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  }
 });
 
 //make this component available to the app

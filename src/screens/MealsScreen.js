@@ -1,25 +1,37 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { View, StyleSheet, Text } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import DefaultText from '../components/DefaultText';
-
+import Meal from './../../services/Meal'
 import MealList from './../components/MealList';
 
 const MealsScreen = props => {
-  
-  
-  const availableMeals = useSelector(state => state.meals.meals);
-
-
-  if (availableMeals.length === 0) {
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    Meal.fetchAll()
+      .then((response) => {
+        setData(response);
+        setLoading(false)
+      })
+      .catch((error) => {
+        console.log(error.response);
+      })
+  }, [])
+  if (loading) return (
+    <View style={styles.content}>
+      <Text>Please Wait While Data is Laoding</Text>
+    </View>
+  )
+  if (data.length === 0) {
     return (
       <View style={styles.content}>
         <DefaultText>No meals found, maybe check your filters?</DefaultText>
       </View>
     );
   }
-  return <MealList listData={availableMeals} navData={props.navigation} />;
+  return <MealList listData={data} navData={props.navigation} />;
 };
 
 MealsScreen.navigationOptions = navigationData => {

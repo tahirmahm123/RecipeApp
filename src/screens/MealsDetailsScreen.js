@@ -1,12 +1,12 @@
 //import liraries
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, Button, StyleSheet,Image,ScrollView} from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import {useSelector,useDispatch} from 'react-redux';
 import { CommonActions } from '@react-navigation/native';
 import HeaderButton from '../components/HeaderButton';
 import DefaultText from '../components/DefaultText';
-
+import Meal from './../../services/Meal'
 import { toggleFavorite } from './../../store/meals.actions';
 
 const ListItem = props => {
@@ -20,59 +20,39 @@ const ListItem = props => {
 // create a component
 const MealsDetailsScreen =props=> {
  const {navigation,route}=props;
- const {mealId,mealTitle,isFav,toggleFav}=props.route.params;
-    //console.log(props.route.params)
-    //const mealId = props.route.params.mealId;
-    //const mealTitle=props.route.params.mealTitle;
+ const {mealId,mealTitle}=props.route.params;
     console.log("mealId:"+mealId+"--mealTile::"+mealTitle);
-    const availableMeals=useSelector(state=>state.meals.meals);
-     const currentMealIsFavorite = useSelector(state=>
-        state.meals.favoriteMeals.some(meal=>meal.id === mealId)
-        ); 
- const selectedMeal=availableMeals.find(meal=>meal.id===mealId);
-
- const dispatch=useDispatch();
- /**
-  * setting Favorite dispatch events
-  */
- const toggleFavoriteHandler=useCallback(()=>{
-    dispatch(toggleFavorite(mealId));
-  },[dispatch,mealId]);
-
-  useEffect(()=>{
-    //navigation.dispatch(CommonActions.setParams({toggleFav:toggleFavoriteHandler}));
-    props.navigation.setParams({toggleFav:toggleFavoriteHandler});
-  },[toggleFavoriteHandler]);
-
-  useEffect(()=>{
-    //navigation.dispatch(CommonActions.setParams({isFav:currentMealIsFavorite}));
-    props.navigation.setParams({isFav:currentMealIsFavorite});
-  },[currentMealIsFavorite])
-        /**
-         * Customizing Headerbar with Favorite button
-         */
-        React.useLayoutEffect(() => {
-           // const toggleFavorite=navigationData.navigation.getParam('toggleFav');
-           // const isFavorite=navigationData.navigation.getParam('isFav');
-            navigation.setOptions({
-                headerStyle: {
-                    backgroundColor:'transparent',
-                  },
-                  headerTransparent: true,
-                headerTitle: route.params.mealTitle,
-                headerRight: () =>(
-                    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-                      <Item
-                        title="Favorite"
-                        iconName={"ios-star"}
-                        iconName={isFav?"md-heart":"md-heart-empty"}
-                        onPress={toggleFav}
-                        
-                      />
-                    </HeaderButtons>
-                  )
-            });
-          }, [route]);
+    const [loading, setLoading] = useState(true);
+  const [selectedMeal, setSelectedMeal] = useState({});
+  useEffect(() => {
+    Meal.findOne(mealId)
+      .then((response) => {
+        setSelectedMeal(response);
+        setLoading(false)
+      })
+      .catch((error) => {
+        console.log(error.response);
+      })
+  }, [])
+  if (loading) return (
+    <View style={styles.content}>
+      <Text>Please Wait While Data is Laoding</Text>
+    </View>
+  )
+  /**
+   * Customizing Headerbar with Favorite button
+   */
+  // React.useLayoutEffect(() => {
+  //     // const toggleFavorite=navigationData.navigation.getParam('toggleFav');
+  //     // const isFavorite=navigationData.navigation.getParam('isFav');
+  //     navigation.setOptions({
+  //         headerStyle: {
+  //             backgroundColor:'transparent',
+  //           },
+  //           headerTransparent: true,
+  //         headerTitle: route.params.mealTitle,
+  //     });
+  //   }, []);
     
         return (
             <ScrollView>
@@ -83,13 +63,9 @@ const MealsDetailsScreen =props=> {
               <DefaultText>{selectedMeal.affordability.toUpperCase()}</DefaultText>
             </View>
             <Text style={styles.title}>Ingredients</Text>
-            {selectedMeal.ingredients.map(ingredient => (
-              <ListItem key={ingredient}>{ingredient}</ListItem>
-            ))}
+            <Text style={{ marginLeft: '5%', marginRight: '5%' }}>{selectedMeal.ingredients}</Text>
             <Text style={styles.title}>Steps</Text>
-            {selectedMeal.steps.map(step => (
-              <ListItem key={step}>{step}</ListItem>
-            ))}
+            <Text style={{ marginLeft: '5%', marginRight: '5%' }}>{selectedMeal.steps}</Text>
           </ScrollView>
         );
     }
