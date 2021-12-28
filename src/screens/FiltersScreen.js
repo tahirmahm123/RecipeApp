@@ -60,11 +60,9 @@ const FiltersScreen =props=> {
             title="Save"
             iconName="ios-save"
             onPress={() => {
-            props.route.params.save;
-          }}
-            />
-          </HeaderButtons>
-          ),
+            props.route.params.save()}}
+                />
+            </HeaderButtons>)
         });
       }, [navigation]);
            

@@ -8,6 +8,7 @@ import HeaderButton from '../components/HeaderButton';
 import DefaultText from '../components/DefaultText';
 import Meal from './../../services/Meal'
 import { toggleFavorite } from './../../store/meals.actions';
+import baseUrl from "../../services/BaseUrl";
 
 const ListItem = props => {
     return (
@@ -56,7 +57,7 @@ const MealsDetailsScreen =props=> {
     
         return (
             <ScrollView>
-            <Image source={{ uri: selectedMeal.imageUrl }} style={styles.image} />
+            <Image source={{ uri: baseUrl+selectedMeal.imageUri[0].url }} style={styles.image} />
             <View style={styles.details}>
               <DefaultText>{selectedMeal.duration}m</DefaultText>
               <DefaultText>{selectedMeal.complexity.toUpperCase()}</DefaultText>

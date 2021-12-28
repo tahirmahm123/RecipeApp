@@ -1,5 +1,7 @@
 import axios from "axios";
-axios.defaults.baseURL = "https://recipeappbyayesha.herokuapp.com/";
+import baseUrl from "./BaseUrl";
+
+axios.defaults.baseURL = baseUrl+"/";
 class GenericService {
 	constructor() {}
 	get = (url) =>

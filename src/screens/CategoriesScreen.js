@@ -2,7 +2,8 @@
 import React, { Component, useState, useEffect } from 'react';
 import { View, Text, StyleSheet,Button,FlatList } from 'react-native';
 import CategoryGridTile from './../components/CategoryGridTile';
-import Categories from "../../services/Categories"
+import Categories from "../../services/Categories";
+import baseUrl from "../../services/BaseUrl";
 // create a component
 const CategoriesScreen = props => {
 const [loading, setLoading] = useState(true);
@@ -27,7 +28,7 @@ const [loading, setLoading] = useState(true);
           <CategoryGridTile
             title={itemData.item.title}
             color={itemData.item.color}
-            uri={itemData.item.uri}
+            uri={baseUrl+itemData.item.uri[0].url}
             onSelect={() => {
               props.navigation.navigate({
                 name: 'CategoryMeals',

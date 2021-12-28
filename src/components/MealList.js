@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, FlatList, StyleSheet ,Text} from 'react-native';
+import baseUrl from "../../services/BaseUrl";
 
 import MealItem from './MealItem';
 
@@ -10,7 +11,7 @@ const MealList = props => {
    return (
       <MealItem
         title={itemData.item.title}
-        image={itemData.item.imageUrl}
+        image={baseUrl+itemData.item.imageUri[0].url}
         duration={itemData.item.duration}
         complexity={itemData.item.complexity}
         affordability={itemData.item.affordability}

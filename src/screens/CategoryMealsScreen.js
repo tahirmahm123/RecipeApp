@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
-import DefaultText from "./../../components/DefaultText";
+import DefaultText from "./../components/DefaultText";
 import MealList from './../components/MealList';
 import Categories from "../../services/Categories"
 
