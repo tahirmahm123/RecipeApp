@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -14,8 +14,11 @@ import FiltersScreen from "./../screens/FiltersScreen";
 import MealsDetailsScreen from "./../screens/MealsDetailsScreen";
 import MealsScreen from "./../screens/MealsScreen";
 import TrendingScreen from "./../screens/TrendingScreen";
-import HomeScreen from './../screens/HomeScreen';
-import Colors from './../constants/Colors';
+import HomeScreen from "./../screens/HomeScreen";
+import Colors from "./../constants/Colors";
+import { Button, View } from "react-native";
+import AddCategory from "../screens/AddCategory";
+import AddMeal from "../screens/AddMeal";
 
 const BottomTab = createBottomTabNavigator();
 const Tab = createMaterialTopTabNavigator();
@@ -23,37 +26,52 @@ const Stack = createStackNavigator();
 
 const defaultStackNavOptions = {
   headerStyle: {
-    backgroundColor: Platform.OS === 'android' ? Colors.primaryColor : ''
+    backgroundColor: Platform.OS === "android" ? Colors.primaryColor : "",
   },
   headerTitleStyle: {
-    fontFamily: 'OpenSansBold'
+    fontFamily: "OpenSansBold",
   },
   headerBackTitleStyle: {
-    fontFamily: 'OpenSans'
+    fontFamily: "OpenSans",
   },
-  headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primaryColor,
- 
+  headerTintColor: Platform.OS === "android" ? "white" : Colors.primaryColor,
 };
-const mealsDetailsNavOptions={
+const mealsDetailsNavOptions = {
   headerStyle: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
   headerTitleStyle: {
-    fontFamily: 'OpenSansBold'
+    fontFamily: "OpenSansBold",
   },
   headerBackTitleStyle: {
-    fontFamily: 'OpenSans'
+    fontFamily: "OpenSans",
   },
-  headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primaryColor,
-}
+  headerTintColor: Platform.OS === "android" ? "white" : Colors.primaryColor,
+};
 /**
  * CategoriesStack
  */
 function CategoriesStack() {
+  const navigation = useNavigation();
+
   return (
-    <Stack.Navigator
-    screenOptions={defaultStackNavOptions}>
-      <Stack.Screen name="Categories" component={CategoriesScreen} />
+    <Stack.Navigator screenOptions={defaultStackNavOptions}>
+      <Stack.Screen
+        name="Categories"
+        component={CategoriesScreen}
+        options={{
+          headerRight: () => (
+            <View style={{ marginRight: 20 }}>
+              <Button
+                onPress={() => navigation.navigate("AddCategory")}
+                title="Add Category"
+                color="#134e4a"
+              />
+            </View>
+          ),
+        }}
+      />
+      <Stack.Screen name="AddCategory" component={AddCategory} />
       <Stack.Screen name="CategoryMeals" component={CategoryMealsScreen} />
       <Stack.Screen name="Meals" component={MealsScreen} />
       <Stack.Screen name="MealDetails" component={MealsDetailsScreen} />
@@ -64,18 +82,19 @@ function CategoriesStack() {
 function TopbarNavigator() {
   return (
     <Tab.Navigator
-      screenOptions = {
-        {
-          "tabBarActiveTintColor": "#FE802B",
-          "tabBarInactiveTintColor": "#6B6133",
-          "tabBarLabelStyle": {
-            "fontSize": 12
+      screenOptions={{
+        tabBarActiveTintColor: "#FE802B",
+        tabBarInactiveTintColor: "#6B6133",
+        tabBarLabelStyle: {
+          fontSize: 12,
+        },
+        tabBarStyle: [
+          {
+            display: "flex",
           },
-          "tabBarStyle": [{
-            "display": "flex"
-          }, null]
-        }
-      }
+          null,
+        ],
+      }}
     >
       <Tab.Screen name="Categories" component={CategoriesStack} />
       <Tab.Screen name="Trending" component={TrendingScreen} />
@@ -87,10 +106,25 @@ function TopbarNavigator() {
  * MealsStack
  */
 function MealsStack() {
+  const navigation = useNavigation();
   return (
-    <Stack.Navigator
-    screenOptions={defaultStackNavOptions}>
-      <Stack.Screen name="Meals" component={MealsScreen} />
+    <Stack.Navigator screenOptions={defaultStackNavOptions}>
+      <Stack.Screen
+        name="Meals"
+        component={MealsScreen}
+        options={{
+          headerRight: () => (
+            <View style={{ marginRight: 20 }}>
+              <Button
+                onPress={() => navigation.navigate("AddMeal")}
+                title="Add Meal"
+                color="#134e4a"
+              />
+            </View>
+          ),
+        }}
+      />
+      <Stack.Screen name="AddMeal" component={AddMeal} />
       <Stack.Screen name="MealDetails" component={MealsDetailsScreen} />
       <Stack.Screen name="Filters" component={FiltersScreen} />
     </Stack.Navigator>
@@ -105,13 +139,13 @@ function FilterStack() {
     </Stack.Navigator>
   );
 }
-function FavoritesStack(){
-  return(
+function FavoritesStack() {
+  return (
     <Stack.Navigator screenOptions={defaultStackNavOptions}>
       <Stack.Screen name="Favorites" component={FavoritesScreen} />
       <Stack.Screen name="MealDetails" component={MealsDetailsScreen} />
     </Stack.Navigator>
-  )
+  );
 }
 
 function RootNavigator() {
@@ -119,18 +153,19 @@ function RootNavigator() {
     <NavigationContainer>
       <BottomTab.Navigator
         initialRouteName="Home"
-        screenOptions = {
-          {
-            "tabBarActiveTintColor": "#FE802B",
-            "tabBarInactiveTintColor": "#6B6133",
-            "tabBarLabelStyle": {
-              "fontSize": 12
+        screenOptions={{
+          tabBarActiveTintColor: "#FE802B",
+          tabBarInactiveTintColor: "#6B6133",
+          tabBarLabelStyle: {
+            fontSize: 12,
+          },
+          tabBarStyle: [
+            {
+              display: "flex",
             },
-            "tabBarStyle": [{
-              "display": "flex"
-            }, null]
-          }
-        }
+            null,
+          ],
+        }}
       >
         <BottomTab.Screen
           name="Home"
@@ -140,7 +175,7 @@ function RootNavigator() {
             tabBarIcon: ({ color, size }) => (
               <FontAwesome name="home" color={color} size={size} />
             ),
-            headerTitle:'Home'
+            headerTitle: "Home",
           }}
         />
         <BottomTab.Screen
@@ -150,7 +185,7 @@ function RootNavigator() {
             tabBarLabel: "Meals",
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="restaurant-menu" color={color} size={size} />
-            )
+            ),
           }}
         />
         <BottomTab.Screen
@@ -160,7 +195,7 @@ function RootNavigator() {
             tabBarLabel: "Favorites",
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="favorite" color={color} size={size} />
-            )
+            ),
           }}
         />
         <BottomTab.Screen
@@ -170,7 +205,7 @@ function RootNavigator() {
             tabBarLabel: "Filters",
             tabBarIcon: ({ color, size }) => (
               <FontAwesome name="filter" color={color} size={size} />
-            )
+            ),
           }}
         />
       </BottomTab.Navigator>
