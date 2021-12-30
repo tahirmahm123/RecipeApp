@@ -4,10 +4,10 @@ import baseUrl from "./BaseUrl";
 axios.defaults.baseURL = baseUrl+"/";
 class GenericService {
 	constructor() {}
-	get = (url) =>
+	get = (url,options={}) =>
 		new Promise((resolve, reject) => {
 			axios
-				.get(url)
+				.get(url,options)
 				.then((res) => {
 					resolve(res.data);
 				})
@@ -15,10 +15,10 @@ class GenericService {
 					reject(err);
 				});
 		});
-	post = (url, data) =>
+	post = (url, data, options={}) =>
 		new Promise((resolve, reject) => {
 			axios
-				.post(url, data)
+				.post(url, data,options)
 				.then((res) => {
 					resolve(res.data);
 				})
@@ -26,10 +26,10 @@ class GenericService {
 					reject(err);
 				});
 		});
-	delete = (url) =>
+	delete = (url,options={}) =>
 		new Promise((resolve, reject) => {
 			axios
-				.delete(url)
+				.delete(url,options)
 				.then((res) => {
 					resolve(res.data);
 				})
@@ -37,10 +37,10 @@ class GenericService {
 					reject(err);
 				});
 		});
-	put = (url, data) =>
+	put = (url, data, options={}) =>
 		new Promise((resolve, reject) => {
 			axios
-				.put(url, data)
+				.put(url, data, options)
 				.then((res) => {
 					resolve(res.data);
 				})
