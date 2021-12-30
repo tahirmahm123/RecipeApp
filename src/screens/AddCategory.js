@@ -63,7 +63,7 @@ const AddCategory = (props) => {
     // Object.keys(data).forEach(function (key) {
     //   formData.append(key, data[key]);
     // })
-    // formData.append('uri', await urlToBlob(localUri),filename);
+    formData.append('uri', await urlToBlob(localUri),filename);
     console.log(JSON.stringify(formData));
     Categories.store(formData)
         .then(function (response) {
